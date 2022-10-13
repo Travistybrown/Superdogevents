@@ -119,6 +119,7 @@ function buildDropDown(){
   }
 
   eventDD.appendChild(ddul);
+  displayStats(curEvents);
 }
 
 
