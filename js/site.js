@@ -88,16 +88,16 @@ function buildDropDown(){
 
   //Add the all item
   //this gets the  <li> <a class="dropdown-item" onclick="getEvents()"></a></li>  from the template
-  let ddlItemNode = document.importNode(template.content, true);
-  let cityName = "All";
+  let ddlItemNodeall = document.importNode(template.content, true);
+  let cityName = "all";
 
   //this returns  <a class="dropdown-item" onclick="getEvents()"></a>
-  let ddItem = ddlItemNode.querySelector("a");
-  ddItem.textContent = cityName;
-  ddItem.setAttribute("data-string", cityName);
+  let ddItemall = ddlItemNodeall.querySelector("a");
+  ddItemall.textContent = cityName;
+  ddItemall.setAttribute("data-string", cityName);
 
   //add the item to the ul
-  ddul.appendChild(ddlItemNode);
+  ddul.appendChild(ddlItemNodeall);
 
  
  
