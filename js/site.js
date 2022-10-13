@@ -82,4 +82,28 @@ function buildDropDown(){
         // ["new york", "san diesgo", etc]
     let citiesOnly = curEvents.map((event) => event.city);
     let distinctEvents = [...new Set(  citiesOnly )   ];
+
+
+   
+    // <ul class="dropwdown-menu"</ul>
+     let ddul = document.createElement("ul");
+    ddul.classList.add("dropdown-menu");
+
+
+
+    for (let i = 0; i < distinctEvents.length; i++) {
+      //this gets the  <li> <a class="dropdown-item" onclick="getEvents()"></a></li>  from the template
+      let ddlItemNode = document.importNode(template.content, true);
+      let cityName = distinctEvents[i];
+
+      //this returns  <a class="dropdown-item" onclick="getEvents()"></a>
+      let ddItem = ddlItemNode.querySelector("a");
+      ddItem.textContent = cityName;
+      ddItem.setAttribute("data-string", cityName);
+
+      //add the item to the ul
+      ddul.appendChild(ddlItemNode);
+}
+
+        eventDD.appendChild(ddul);
 }
