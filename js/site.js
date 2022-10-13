@@ -69,41 +69,169 @@ const events = [
 
 //builds a list of specific cities
 function buildDropDown(){
+  let eventDD = document.getElementById("eventDropDown");
+  eventDD.innerHTML = "";
 
-    let eventDD = document.getElementById("eventDropDown");
-    eventDD.innerHTML = "";
+  //grab my template from the template tag;
+  const template = document.getElementById("cityDD-template");
 
-    //grab my template from the template tag;
-    const template = document.getElementById("cityDD-template");
+  let curEvents = events;
 
-    let curEvents = events;
+  //filter our array by distinct cities
+  // ["new york", "san diesgo", etc]
+  let citiesOnly = curEvents.map((event) => event.city);
+  let distinctEvents = [...new Set(citiesOnly)];
 
-    //filter our array by distinct cities
-        // ["new york", "san diesgo", etc]
-    let citiesOnly = curEvents.map((event) => event.city);
-    let distinctEvents = [...new Set(  citiesOnly )   ];
+  // <ul class="dropwdown-menu"</ul>
+  let ddul = document.createElement("ul");
+  ddul.classList.add("dropdown-menu");
 
+  //Add the all item
+  //this gets the  <li> <a class="dropdown-item" onclick="getEvents()"></a></li>  from the template
+  let ddlItemNode = document.importNode(template.content, true);
+  let cityName = "All";
 
-   
-    // <ul class="dropwdown-menu"</ul>
-     let ddul = document.createElement("ul");
-    ddul.classList.add("dropdown-menu");
+  //this returns  <a class="dropdown-item" onclick="getEvents()"></a>
+  let ddItem = ddlItemNode.querySelector("a");
+  ddItem.textContent = cityName;
+  ddItem.setAttribute("data-string", cityName);
 
+  //add the item to the ul
+  ddul.appendChild(ddlItemNode);
 
+ 
+ 
+ 
+ 
+ 
+  for (let i = 0; i < distinctEvents.length; i++) {
+    //this gets the  <li> <a class="dropdown-item" onclick="getEvents()"></a></li>  from the template
+    let ddlItemNode = document.importNode(template.content, true);
+    let cityName = distinctEvents[i];
 
-    for (let i = 0; i < distinctEvents.length; i++) {
-      //this gets the  <li> <a class="dropdown-item" onclick="getEvents()"></a></li>  from the template
-      let ddlItemNode = document.importNode(template.content, true);
-      let cityName = distinctEvents[i];
+    //this returns  <a class="dropdown-item" onclick="getEvents()"></a>
+    let ddItem = ddlItemNode.querySelector("a");
+    ddItem.textContent = cityName;
+    ddItem.setAttribute("data-string", cityName);
 
-      //this returns  <a class="dropdown-item" onclick="getEvents()"></a>
-      let ddItem = ddlItemNode.querySelector("a");
-      ddItem.textContent = cityName;
-      ddItem.setAttribute("data-string", cityName);
+    //add the item to the ul
+    ddul.appendChild(ddlItemNode);
+  }
 
-      //add the item to the ul
-      ddul.appendChild(ddlItemNode);
+  eventDD.appendChild(ddul);
 }
 
-        eventDD.appendChild(ddul);
+
+function getEvents(element){
+    let city = element.getAttribute("data-string");
+
+   let curEvents = events;
+
+   let statsHeader = document.getElementById("statsHeader");
+
+   statsHeader.innerHTML = `Stats For ${city} events`;
+
+   //display stats for all or the selected city 
+   let filteredEvents = curEvents;
+
+   if (city !="all"){
+
+    //filter the array by cityname
+    filteredEvents = curEvents.filter(function (item){
+        if (item.city == city){
+            return item;
+        }
+    });
+
+
+   }
+ // calling a function with a list of events
+   displayStats(filteredEvents);
+}
+
+
+function displayStats(events){
+
+    let total = 0;
+    let average = 0;
+    let most = 0;
+    let least = -1;
+
+    total = totalAttendance(events);
+   
+    document.getElementById("total").innerHTML = total.toLocaleString();
+
+      avg = averageAttendance(events);
+    document.getElementById("average").innerHTML = avg.toLocaleString(
+        "en-US", {minimumFractionDigits: 0, maximumFractionDigits:0 }
+    );
+
+        least = leastAttendance(events);
+        document.getElementById("least").innerHTML = least.toLocaleString();
+
+        most = mostAttendance(events);
+     document.getElementById("most").innerHTML = most.toLocaleString();
+
+  
+}
+
+function totalAttendance(events){
+
+    let totalAttendance = 0;
+
+    for (let i = 0; i < events.length; i++) {
+       
+    totalAttendance += events[i].attendance;    
+    }
+
+    return totalAttendance;
+}
+
+function averageAttendance(events){
+
+    let avg = 0;
+    
+
+    
+
+for (let i = 0; i < events.length; i++) {
+   
+      avg += events[i].attendance ;
+
+  
+}
+  
+  
+  let averageAttendance = avg / events.length;
+return averageAttendance;
+
+}
+
+function leastAttendance(events){
+    let least = -1;
+    for (let i = 0; i < events.length; i++) {
+        
+        currentAttendance = events[i].attendance;
+
+        if( least > currentAttendance  || least < 0){
+            least = currentAttendance;
+        }
+
+
+    }
+
+    return least;
+}
+
+function mostAttendance(events) {
+  let most = -1;
+  for (let i = 0; i < events.length; i++) {
+    currentAttendance = events[i].attendance;
+
+    if (most < currentAttendance || most > 0) {
+      most = currentAttendance;
+    }
+  }
+
+  return most;
 }
