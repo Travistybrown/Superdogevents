@@ -80,5 +80,6 @@ function buildDropDown(){
 
     //filter our array by distinct cities
         // ["new york", "san diesgo", etc]
-    let distinctEvents = [...new Set(  curEvents.map((event) => event.city)  )   ];
+    let citiesOnly = curEvents.map((event) => event.city);
+    let distinctEvents = [...new Set(  citiesOnly )   ];
 }
