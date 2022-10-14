@@ -253,3 +253,33 @@ function displayEventData() {
     eventBody.appendChild(eventRow);
   }
 }
+
+
+///saves a new event to local storage
+function saveEventData(){
+    let curEvents = getEventData();
+
+    //this object should look like events city state attendance and date like below
+  //  {
+   // event: "ComicCon",
+   // city: "New York",
+   // state: "New York",
+    //attendance: 240000,
+   // date: "06/01/2017",
+ // }
+    let newEventObj = {};
+
+    newEventObj["event"] = document.getElementById("newEventName").value; 
+    newEventObj["city"] = document.getElementById("newEventCity").value; 
+    let stateSel = document.getElementById("newEventState");
+    newEventObj["state"] = stateSel.options[stateSel.selectedIndex].text;
+    newEventObj["Attendance"] = parseInt(document.getElementById("newEventAttendance").value,10); 
+    //dates are a pain all this below is neccasary in javascript
+    let eventDate = document.getElementById("newEventDate").value;
+    let eventDate2 = `${eventDate} 00:00`;
+     newEventObj["date"] = new Date(eventDate2).toLocaleDateString();
+
+     curEvents.push(newEventObj);
+
+     localStorage.setItem("eventData", JSON.stringify(curEvents));
+}
