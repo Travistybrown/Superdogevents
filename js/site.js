@@ -282,4 +282,6 @@ function saveEventData(){
      curEvents.push(newEventObj);
 
      localStorage.setItem("eventData", JSON.stringify(curEvents));
+
+     buildDropDown();
 }
