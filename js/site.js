@@ -1,6 +1,5 @@
 // this intial dataset for superdog. Is is an array of objects.
 
-
 const events = [
   {
     event: "ComicCon",
@@ -67,15 +66,15 @@ const events = [
   },
 ];
 
-//builds a list of specific cities
-function buildDropDown(){
+//builds a list of specific cities. Entry point for our app
+function buildDropDown() {
   let eventDD = document.getElementById("eventDropDown");
   eventDD.innerHTML = "";
 
   //grab my template from the template tag;
   const template = document.getElementById("cityDD-template");
 
-  let curEvents = events;
+  let curEvents = getEventData();
 
   //filter our array by distinct cities
   // ["new york", "san diesgo", etc]
@@ -99,11 +98,6 @@ function buildDropDown(){
   //add the item to the ul
   ddul.appendChild(ddlItemNodeall);
 
- 
- 
- 
- 
- 
   for (let i = 0; i < distinctEvents.length; i++) {
     //this gets the  <li> <a class="dropdown-item" onclick="getEvents()"></a></li>  from the template
     let ddlItemNode = document.importNode(template.content, true);
@@ -120,108 +114,90 @@ function buildDropDown(){
 
   eventDD.appendChild(ddul);
   displayStats(curEvents);
+  //load the date in the grid
+  displayEventData();
 }
 
+function getEvents(element) {
+  let city = element.getAttribute("data-string");
 
-function getEvents(element){
-    let city = element.getAttribute("data-string");
+  let curEvents = getEventData();
 
-   let curEvents = events;
+  let statsHeader = document.getElementById("statsHeader");
 
-   let statsHeader = document.getElementById("statsHeader");
+  statsHeader.innerHTML = `Stats For ${city} events`;
 
-   statsHeader.innerHTML = `Stats For ${city} events`;
+  //display stats for all or the selected city
+  let filteredEvents = curEvents;
 
-   //display stats for all or the selected city 
-   let filteredEvents = curEvents;
-
-   if (city !="all"){
-
+  if (city != "all") {
     //filter the array by cityname
-    filteredEvents = curEvents.filter(function (item){
-        if (item.city == city){
-            return item;
-        }
+    filteredEvents = curEvents.filter(function (item) {
+      if (item.city == city) {
+        return item;
+      }
     });
-
-
-   }
- // calling a function with a list of events
-   displayStats(filteredEvents);
+  }
+  // calling a function with a list of events
+  displayStats(filteredEvents);
 }
 
+//display the stats for the selected city
+function displayStats(events) {
+  let total = 0;
+  let average = 0;
+  let most = 0;
+  let least = -1;
 
-function displayStats(events){
+  total = totalAttendance(events);
 
-    let total = 0;
-    let average = 0;
-    let most = 0;
-    let least = -1;
+  document.getElementById("total").innerHTML = total.toLocaleString();
 
-    total = totalAttendance(events);
-   
-    document.getElementById("total").innerHTML = total.toLocaleString();
+  avg = averageAttendance(events);
+  document.getElementById("average").innerHTML = avg.toLocaleString("en-US", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  });
 
-      avg = averageAttendance(events);
-    document.getElementById("average").innerHTML = avg.toLocaleString(
-        "en-US", {minimumFractionDigits: 0, maximumFractionDigits:0 }
-    );
+  least = leastAttendance(events);
+  document.getElementById("least").innerHTML = least.toLocaleString();
 
-        least = leastAttendance(events);
-        document.getElementById("least").innerHTML = least.toLocaleString();
-
-        most = mostAttendance(events);
-     document.getElementById("most").innerHTML = most.toLocaleString();
-
-  
+  most = mostAttendance(events);
+  document.getElementById("most").innerHTML = most.toLocaleString();
 }
 
-function totalAttendance(events){
+function totalAttendance(events) {
+  let totalAttendance = 0;
 
-    let totalAttendance = 0;
+  for (let i = 0; i < events.length; i++) {
+    totalAttendance += events[i].attendance;
+  }
 
-    for (let i = 0; i < events.length; i++) {
-       
-    totalAttendance += events[i].attendance;    
-    }
-
-    return totalAttendance;
+  return totalAttendance;
 }
 
-function averageAttendance(events){
+function averageAttendance(events) {
+  let avg = 0;
 
-    let avg = 0;
-    
+  for (let i = 0; i < events.length; i++) {
+    avg += events[i].attendance;
+  }
 
-    
-
-for (let i = 0; i < events.length; i++) {
-   
-      avg += events[i].attendance ;
-
-  
-}
-  
-  
   let averageAttendance = avg / events.length;
-return averageAttendance;
-
+  return averageAttendance;
 }
 
-function leastAttendance(events){
-    let least = -1;
-    for (let i = 0; i < events.length; i++) {
-        
-        currentAttendance = events[i].attendance;
+function leastAttendance(events) {
+  let least = -1;
+  for (let i = 0; i < events.length; i++) {
+    currentAttendance = events[i].attendance;
 
-        if( least > currentAttendance  || least < 0){
-            least = currentAttendance;
-        }
-
-
+    if (least > currentAttendance || least < 0) {
+      least = currentAttendance;
     }
+  }
 
-    return least;
+  return least;
 }
 
 function mostAttendance(events) {
@@ -235,4 +211,45 @@ function mostAttendance(events) {
   }
 
   return most;
+}
+
+// retrieve data from local storage
+function getEventData() {
+  let curEvents = JSON.parse(localStorage.getItem("eventData"));
+
+  if (curEvents == null) {
+    curEvents = events;
+    localStorage.setItem("eventData", JSON.stringify(curEvents));
+  }
+
+  return curEvents;
+}
+
+//displays the event data in the grid
+function displayEventData() {
+  // get the template
+  const template = document.getElementById("eventData-template");
+  //get the location that the template will be written  bascially puttin in back in the main graph like on line 129 html
+  const eventBody = document.getElementById("eventBody");
+
+  eventBody.innerHTML = "";
+  //thats looking in the local storage
+  let curEvents = getEventData();
+
+  for (let i = 0; i < curEvents.length; i++) {
+    const eventRow = document.importNode(template.content, true);
+    //queryselector will just get the first td if u put quereyselectorall it will get all the td
+    const eventCols = eventRow.querySelectorAll("td");
+    //set each col in order by what u want
+    eventCols[0].textContent = curEvents[i].event;
+    eventCols[1].textContent = curEvents[i].city;
+    eventCols[2].textContent = curEvents[i].state;
+    eventCols[3].textContent = curEvents[i].attendance;
+
+    //format the date for the page
+    let eventDate = new Date(curEvents[i].date).toLocaleDateString();
+
+    eventCols[4].textContent = eventDate;
+    eventBody.appendChild(eventRow);
+  }
 }

@@ -109,12 +109,28 @@
         </table>
         </div>
         <div class=col-6>
-
+          <img src="" class="img-fluid p-2">
         </div>
       </div>
-      <div class="row">
-        <div class="col-12">
-
+      <div class="row border-top border-2">
+        <div class="col-12 mt-2">
+          <button class="btn btn-primary btn-lg">Add Event</button>
+          <div class="table-resonsive mt-2">
+            <table class="table table-striped" id="eventData">
+              <thead class="table-secondary">
+                <tr>
+                  <th>Event Name</th>
+                  <th>City</th>
+                  <th>State</th>
+                  <th>Attendance</th>
+                  <th>Event Date</th>
+                </tr>
+              </thead>
+              <tbody id="eventBody">
+                <!---Template data goes here-->
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </main>
@@ -148,6 +164,17 @@
     <!-- Page Templates-->
     <template id="cityDD-template">
      <li> <a class="dropdown-item" onclick="getEvents(this)"></a></li> 
+    </template>
+
+
+    <template id="eventData-template">
+      <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
     </template>
 
 
