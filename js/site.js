@@ -273,7 +273,7 @@ function saveEventData(){
     newEventObj["city"] = document.getElementById("newEventCity").value; 
     let stateSel = document.getElementById("newEventState");
     newEventObj["state"] = stateSel.options[stateSel.selectedIndex].text;
-    newEventObj["Attendance"] = parseInt(document.getElementById("newEventAttendance").value,10); 
+    newEventObj["attendance"] = parseInt(document.getElementById("newEventAttendance").value,10); 
     //dates are a pain all this below is neccasary in javascript
     let eventDate = document.getElementById("newEventDate").value;
     let eventDate2 = `${eventDate} 00:00`;

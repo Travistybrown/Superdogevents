@@ -171,7 +171,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-       <form id="newEventForm">
+       <form id="newEventForm" onsubmit="saveEventData()">
         <div class="mb-2">
           <label class="form-label" for="newEventName">Event Name</label>
           <input id="newEventName" class="form-control" type="text" placeholder="Enter Event Name" required>
@@ -244,12 +244,16 @@
           <label class="form-label" for="newEventDate">Date</label>
           <input id="newEventDate" class="form-control" type="date" placeholder="" required>
         </div>
-       </form>
-      </div>
-      <div class="modal-footer">
+<div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" onlick='saveEventData()' id="btnSave" data-bs-dismiss="modal">Save</button>
+        <button type="submit" class="btn btn-primary" onlick='saveEventData()' id="btnSave" data-bs-dismiss="modal">Save</button>
       </div>
+
+       </form>
+
+
+      </div>
+      
     </div>
   </div>
 </div>
